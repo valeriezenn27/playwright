@@ -1,6 +1,2 @@
-.vscode/
-build/
-typings/
-node_modules/
-*/images
-*/videos
+node_modules
+.DS*

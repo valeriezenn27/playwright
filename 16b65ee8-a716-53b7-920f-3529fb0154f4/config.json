@@ -1,23 +1,20 @@
 {
-	"guid": "16b65ee8-a716-53b7-920f-3529fb0154f4",
-	"name": "Dia Art Foundation",
-	"pages": {
+    "guid": "16b65ee8-a716-53b7-920f-3529fb0154f4",
+    "name": "Dia Art Foundation",
+    "pages": {
 		"home": {
 			"selectors": [],
 			"url": "https://www.diaart.org"
 		},
 		"membership": {
-			"selectors": [
-				"#heading90",
-				"#heading90 .section-link"
-			],
+			"selectors": ["#heading90", "#heading90 .section-link"],
 			"url": "https://www.diaart.org/support/membership",
 			"continue": ".BBFormSubmitButton"
 		},
 		"media": {
 			"membership": {
-				"video": "videos/membership",
-				"images": "memberships"
+				"video": "membership",
+				"images": "membership"
 			}
 		}
 	},
@@ -27,7 +24,7 @@
 		"last": "Thompson",
 		"email": "kim@socialgoodsoftware.com",
 		"phone": "801-738-901",
-		"country": "United Stats",
+		"country": "United States",
 		"address": "9690 South 300 West #303",
 		"city": "Sandy",
 		"state": "UT",
