@@ -11,10 +11,26 @@
 			"url": "https://www.diaart.org/support/membership",
 			"continue": ".BBFormSubmitButton"
 		},
+		"ticket": {
+			"event": {
+				"selectors": [".fc-event-container:first a"],
+				"url": "https://diaart.org/visit/tickets",
+				"quantity" : "1",
+				"action": [".EventRegistrationExpress_RegistrantsButton", "*_btnAddToCart"]
+			}
+		},
+		"empty-cart": {
+			"url": "https://4764.blackbaudhosting.com/4764/page.aspx?pid=191",
+			"action": "*_lbRemoveAll"
+		},
 		"media": {
 			"membership": {
 				"video": "membership",
 				"images": "membership"
+			},
+			"tickets": {
+				"video": "ticket",
+				"images": "ticket"
 			}
 		}
 	},

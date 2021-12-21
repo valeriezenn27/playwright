@@ -3,7 +3,8 @@
     "membership": "npx playwright test --headed"
   },
   "devDependencies": {
-    "@playwright/test": "^1.17.1"
+    "@playwright/test": "^1.17.1",
+    "@types/jquery": "^3.5.10"
   },
   "dependencies": {
     "playwright": "^1.17.1",
