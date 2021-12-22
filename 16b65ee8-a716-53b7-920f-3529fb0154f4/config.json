@@ -7,13 +7,13 @@
 			"url": "https://www.diaart.org"
 		},
 		"membership": {
-			"selectors": ["#heading90", "#heading90 .section-link"],
+			"selectors": ["#heading90", "#collapse90 >> .section-link"],
 			"url": "https://www.diaart.org/support/membership",
-			"continue": ".BBFormSubmitButton"
+			"continue": "text=Continue"
 		},
 		"ticket": {
 			"event": {
-				"selectors": [".fc-event-container:first a"],
+				"selectors": [".fc-event-container >> a", "input[id*='_listPriceList_textboxQuantity_2']"],
 				"url": "https://diaart.org/visit/tickets",
 				"quantity" : "1",
 				"action": [".EventRegistrationExpress_RegistrantsButton", "*_btnAddToCart"]
@@ -23,15 +23,68 @@
 			"url": "https://4764.blackbaudhosting.com/4764/page.aspx?pid=191",
 			"action": "*_lbRemoveAll"
 		},
-		"media": {
-			"membership": {
-				"video": "membership",
-				"images": "membership"
-			},
-			"tickets": {
-				"video": "ticket",
-				"images": "ticket"
-			}
+		"donation": {
+			"selectors": [".top-links >> .section-link", "[id*='_txtAmount']"],
+			"url": "https://www.diaart.org/support/donate",
+			"amount-valid" : "100",
+			"amount-valid-update" : "150",
+			"amount-invalid" : "invalid-amount",
+			"continue": "text=Continue",
+			"edit-item": ".cart-type-Donations .PaymentPart_CartDescriptionCell.col-sm-12 >> .edit-item-link"
+		}
+	},
+	"common" : {
+		"selectors" : {
+			"membership-close" : ".ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.newLogin .ui-dialog-titlebar .ui-dialog-titlebar-close",
+			"covid-waiver" : "input#agree-to-terms",
+			"cart-empty" : "#sgs-cart-buttons >> a",
+			"cart-empty-page" : "#sgs-empty-cart"
+		},
+		"checkout-form" : {
+			"first": "input[id*='_listRegistrationGroups_listRegistrations_0_txtRegistrantFirstName_0']",
+			"last": "input[id*='_listRegistrationGroups_listRegistrations_0_txtRegistrantLastName_0']",
+			"email": "input[id*='_listRegistrationGroups_listRegistrations_0_txtRegistrantEmail_0']",
+			"phone": "input[id*='_listRegistrationGroups_listRegistrations_0_txtRegistrantPhone_0']",
+			"country": "select[id*='_listRegistrationGroups_listRegistrations_0_AddressControl_0_dd_Country_0']",
+			"address": "textarea[id*='_listRegistrationGroups_listRegistrations_0_AddressControl_0_tb_AddressLine_0']",
+			"city": "input[id*='_listRegistrationGroups_listRegistrations_0_AddressControl_0_tb_CityUS_0']",
+			"state": "select[id*='_listRegistrationGroups_listRegistrations_0_AddressControl_0_dd_StateUS_0']",
+			"zip": "input[id*='_listRegistrationGroups_listRegistrations_0_AddressControl_0_tb_zipUS_0']"
+		},
+		"membership-form" : {
+			"title": "select[id*='_listViewMembers_ddTitle_0']",
+			"first": "input[id*='_listViewMembers_txtFirstName_0']",
+			"last": "input[id*='_listViewMembers_txtLastName_0']"
+		},
+		"cart-form" : {
+			"title": "select[id*='_PersonalInfoShippingAddress_ddTitle']",
+			"first" : "input[id*='_PersonalInfoShippingAddress_txtFirstName']",
+			"last": "input[id*='_PersonalInfoShippingAddress_txtLastName']",
+			"email": "input[id*='_PersonalInfoShippingAddress_txtEmail']",
+			"phone": "input[id*='_PersonalInfoShippingAddress_txtPhoneNumber']",
+			"country": "select[id*='_PersonalInfoShippingAddress_AddressControl_dd_Country']",
+			"address": "textarea[id*='_AddressControl_tb_AddressLine']",
+			"city": "input[id*='_PersonalInfoShippingAddress_AddressControl_tb_CityUS']",
+			"state": "select[id*='_PersonalInfoShippingAddress_AddressControl_dd_StateUS']",
+			"zip": "input[id*='_PersonalInfoShippingAddress_AddressControl_tb_zipUS']"
+		}
+	},
+	"media": {
+		"membership": {
+			"video": "membership",
+			"images": "membership"
+		},
+		"tickets": {
+			"video": "ticket",
+			"images": "ticket"
+		},
+		"signin": {
+			"video": "signin",
+			"images": "signin"
+		},
+		"donation": {
+			"video": "donation",
+			"images": "donation"
 		}
 	},
 	"personal": {
@@ -45,5 +98,10 @@
 		"city": "Sandy",
 		"state": "UT",
 		"zip": "84070"
+	},
+	"signin": {
+		"username": "valerie@socialgoodsoftware.com",
+		"password-valid": "Hello12345!",
+		"password-invalid": "Invalid"
 	}
 }

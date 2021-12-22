@@ -10,8 +10,8 @@ test.describe('Tickets', () => {
         const userAgentInfo = uaParser(getUA);
         const browserName = userAgentInfo.browser.name;
 
-        const imagePath = `images/${cfg.guid}/${browserName}/${cfg.pages.media.tickets.images}`;
-        const videoPath = `videos/${cfg.guid}/${browserName}/${cfg.pages.media.tickets.video}`;
+        const imagePath = `images/${cfg.guid}/${browserName}/${cfg.media.tickets.images}`;
+        const videoPath = `videos/${cfg.guid}/${browserName}/${cfg.media.tickets.video}`;
 
         const context = await browser.newContext({
             recordVideo: { dir: videoPath }
@@ -19,65 +19,60 @@ test.describe('Tickets', () => {
 
         page = await context.newPage();
 
-        await page.video().path();
-
         //Go to tickets URL
         await page.goto(cfg.pages.ticket.event.url);
 
+        //Click the first event in calendar
         const [eventPage] = await Promise.all([
             page.waitForEvent('popup'),
-            page.click('.fc-event-container >> a')
+            page.click(cfg.pages.ticket.event.selectors[0])
         ]);
 
         await eventPage.video().path();
 
         //Close membership pop up
-        await eventPage.click('.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.newLogin .ui-dialog-titlebar .ui-dialog-titlebar-close');
+        await eventPage.click(cfg.common.selectors['membership-close']);
 
         //Add ticket quantity
-        await eventPage.fill('input[id*="_listPriceList_textboxQuantity_2"]', cfg.pages.ticket.event.quantity);
-
-        await eventPage.screenshot({ path: `${imagePath}/1_event_addItems.png`, fullPage: true });
-
-        //Click Continue
+        await eventPage.fill(cfg.pages.ticket.event.selectors[1], cfg.pages.ticket.event.quantity);
+        await eventPage.waitForTimeout(500);
+        await eventPage.screenshot({ path: `${imagePath}/1_event_add_item.png`, fullPage: true });
         await eventPage.click('text=Continue');
 
+        //Fill out registrant information
         await Promise.all([
             eventPage.waitForSelector('[id*="_listRegistrationGroups_listRegistrations_0_registrantContainer_0"]'),
         ]);
-
-        //Fill out registrant information
-        await eventPage.fill('input[id*="_listRegistrationGroups_listRegistrations_0_txtRegistrantFirstName_0"]', cfg.personal.first);
-        await eventPage.fill('input[id*="_listRegistrationGroups_listRegistrations_0_txtRegistrantLastName_0"]', cfg.personal.last);
-        await eventPage.fill('input[id*="_listRegistrationGroups_listRegistrations_0_txtRegistrantPhone_0"]', cfg.personal.phone);
-        await eventPage.fill('input[id*="_listRegistrationGroups_listRegistrations_0_txtRegistrantEmail_0"]', cfg.personal.email);
+        await eventPage.fill(cfg.common['checkout-form'].first, cfg.personal.first);
+        await eventPage.fill(cfg.common['checkout-form'].last, cfg.personal.last);
+        await eventPage.fill(cfg.common['checkout-form'].phone, cfg.personal.phone);
+        await eventPage.fill(cfg.common['checkout-form'].email, cfg.personal.email);
         await eventPage.waitForTimeout(500);
-        await eventPage.selectOption('select[id*="_listRegistrationGroups_listRegistrations_0_AddressControl_0_dd_Country_0"]', cfg.personal.country);
-        await eventPage.selectOption('select[id*="_listRegistrationGroups_listRegistrations_0_AddressControl_0_dd_StateUS_0"]', cfg.personal.state);
-        await eventPage.fill('input[id*="_listRegistrationGroups_listRegistrations_0_AddressControl_0_tb_zipUS_0"]', cfg.personal.zip);
-        await eventPage.fill('input[id*="_listRegistrationGroups_listRegistrations_0_AddressControl_0_tb_CityUS_0"]', cfg.personal.city);
-        await eventPage.fill('textarea[id*="_listRegistrationGroups_listRegistrations_0_AddressControl_0_tb_AddressLine_0"]', cfg.personal.address);
+        await eventPage.selectOption(cfg.common['checkout-form'].country, cfg.personal.country);
+        await eventPage.selectOption(cfg.common['checkout-form'].state, cfg.personal.state);
+        await eventPage.fill(cfg.common['checkout-form'].zip, cfg.personal.zip);
+        await eventPage.fill(cfg.common['checkout-form'].city, cfg.personal.city);
+        await eventPage.fill(cfg.common['checkout-form'].address, cfg.personal.address);
         //Check covid waiver
-        await eventPage.click('input#agree-to-terms');
-
+        await eventPage.click(cfg.common.selectors['covid-waiver']);
+        await eventPage.waitForTimeout(500);
         await eventPage.screenshot({ path: `${imagePath}/2_event_registration.png`, fullPage: true });
-
         //Click Add To Cart
         await eventPage.click('text=Add To Cart');
 
+        //Cart Page
         await Promise.all([
             eventPage.waitForSelector('#sgs-cart-buttons'),
         ]);
-
+        await eventPage.waitForTimeout(500);
         await eventPage.screenshot({ path: `${imagePath}/3_event_cart.png`, fullPage: true });
 
         //Click Empty Cart
-        await eventPage.click('#sgs-cart-buttons >> a');
-
+        await eventPage.click(cfg.common.selectors['cart-empty']);
         await Promise.all([
             eventPage.waitForSelector('#sgs-empty-cart'),
         ]);
-
+        await eventPage.waitForTimeout(500);
         await eventPage.screenshot({ path: `${imagePath}/4_empty_cart.png`, fullPage: true });
 
         // await context.close();

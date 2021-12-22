@@ -4,7 +4,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.17.1",
-    "@types/jquery": "^3.5.10"
+    "@types/jquery": "^3.5.10",
+    "@types/ua-parser-js": "^0.7.36"
   },
   "dependencies": {
     "playwright": "^1.17.1",

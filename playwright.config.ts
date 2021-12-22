@@ -9,14 +9,14 @@ const config: PlaywrightTestConfig = {
         }
     },
     projects: [
-        // {
-        //     name: 'chromium',
-        //     use: { ...devices['Desktop Chrome'], browserName: 'chromium' },
-        // },
         {
-            name: 'firefox',
-            use: { ...devices['Desktop Firefox'], browserName: 'firefox' },
+            name: 'chromium',
+            use: { ...devices['Desktop Chrome'], browserName: 'chromium' },
         },
+        // {
+        //     name: 'firefox',
+        //     use: { ...devices['Desktop Firefox'], browserName: 'firefox' },
+        // },
         // {
         //     name: 'webkit',
         //     use: { ...devices['Desktop Webkit'], browserName: 'webkit' },
