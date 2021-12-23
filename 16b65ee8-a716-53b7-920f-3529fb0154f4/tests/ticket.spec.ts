@@ -3,29 +3,48 @@ import cfg from '../config.json';
 import uaParser from 'ua-parser-js';
 
 test.describe('Tickets', () => {
-    test('Dia Beacon Timed Tickets', async ({ browser, page }) => {
+    test('Dia Beacon Timed Tickets', async ({ browser, page }, workerInfo) => {
         test.setTimeout(120000);
 
         const getUA = await page.evaluate(() => navigator.userAgent);
         const userAgentInfo = uaParser(getUA);
         const browserName = userAgentInfo.browser.name;
+        const projectName = workerInfo.project.name;
+        // const viewport = `${page.viewportSize().width}x${page.viewportSize().height}`;
 
-        const imagePath = `images/${cfg.guid}/${browserName}/${cfg.media.tickets.images}`;
-        const videoPath = `videos/${cfg.guid}/${browserName}/${cfg.media.tickets.video}`;
+        const imagePath = `images/${cfg.guid}/${browserName}/${projectName}/${cfg.media.tickets.images}`;
+        const videoPath = `videos/${cfg.guid}/${browserName}/${projectName}/${cfg.media.tickets.video}`;
 
         const context = await browser.newContext({
             recordVideo: { dir: videoPath }
         });
 
+        page.close();
         page = await context.newPage();
 
         //Go to tickets URL
         await page.goto(cfg.pages.ticket.event.url);
 
         //Click the first event in calendar
+        let eventSelector = cfg.pages.ticket.event.selectors[0];
+        if (page.viewportSize().width <= 665) {
+            eventSelector = cfg.pages.ticket.event.selectors[2];
+        }
+
+        let hasEvent = false;
+        while (!hasEvent) {
+            await page.click(cfg.pages.ticket.event.selectors[3]);
+            try {
+                await page.waitForSelector(eventSelector, { timeout: 500 })
+                hasEvent = true;
+            } catch (error) {
+                // console.log("The element didn't appear.");
+            }
+        }
+
+        page.click(eventSelector);
         const [eventPage] = await Promise.all([
-            page.waitForEvent('popup'),
-            page.click(cfg.pages.ticket.event.selectors[0])
+            page.waitForEvent('popup')
         ]);
 
         await eventPage.video().path();
@@ -36,7 +55,7 @@ test.describe('Tickets', () => {
         //Add ticket quantity
         await eventPage.fill(cfg.pages.ticket.event.selectors[1], cfg.pages.ticket.event.quantity);
         await eventPage.waitForTimeout(500);
-        await eventPage.screenshot({ path: `${imagePath}/1_event_add_item.png`, fullPage: true });
+        await eventPage.screenshot({ path: `${imagePath}/1_ticket_checkout_item.png`, fullPage: true });
         await eventPage.click('text=Continue');
 
         //Fill out registrant information
@@ -56,7 +75,7 @@ test.describe('Tickets', () => {
         //Check covid waiver
         await eventPage.click(cfg.common.selectors['covid-waiver']);
         await eventPage.waitForTimeout(500);
-        await eventPage.screenshot({ path: `${imagePath}/2_event_registration.png`, fullPage: true });
+        await eventPage.screenshot({ path: `${imagePath}/2_ticket_checkout_registration.png`, fullPage: true });
         //Click Add To Cart
         await eventPage.click('text=Add To Cart');
 
@@ -65,7 +84,7 @@ test.describe('Tickets', () => {
             eventPage.waitForSelector('#sgs-cart-buttons'),
         ]);
         await eventPage.waitForTimeout(500);
-        await eventPage.screenshot({ path: `${imagePath}/3_event_cart.png`, fullPage: true });
+        await eventPage.screenshot({ path: `${imagePath}/3_ticket_cart.png`, fullPage: true });
 
         //Click Empty Cart
         await eventPage.click(cfg.common.selectors['cart-empty']);
@@ -75,6 +94,6 @@ test.describe('Tickets', () => {
         await eventPage.waitForTimeout(500);
         await eventPage.screenshot({ path: `${imagePath}/4_empty_cart.png`, fullPage: true });
 
-        // await context.close();
+        await context.close();
     });
 });

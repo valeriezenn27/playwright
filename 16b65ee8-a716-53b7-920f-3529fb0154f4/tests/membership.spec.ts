@@ -3,25 +3,28 @@ import cfg from '../config.json';
 import uaParser from 'ua-parser-js';
 
 test.describe('Membership', () => {
-    test('Join, renew or gift this membership', async ({ browser, page }) => {
+    test('Join, renew or gift this membership', async ({ browser, page }, workerInfo) => {
         test.setTimeout(120000);
 
         const getUA = await page.evaluate(() => navigator.userAgent);
         const userAgentInfo = uaParser(getUA);
         const browserName = userAgentInfo.browser.name;
+        const projectName = workerInfo.project.name;
+        // const viewport = `${page.viewportSize().width}x${page.viewportSize().height}`;
 
-        const imagePath = `images/${cfg.guid}/${browserName}/${cfg.media.membership.images}`;
-        const videoPath = `videos/${cfg.guid}/${browserName}/${cfg.media.membership.video}`;
+        const imagePath = `images/${cfg.guid}/${browserName}/${projectName}/${cfg.media.membership.images}`;
+        const videoPath = `videos/${cfg.guid}/${browserName}/${projectName}/${cfg.media.membership.video}`;
 
         const context = await browser.newContext({
             recordVideo: { dir: videoPath }
         });
-
+        
+        page.close();
         page = await context.newPage();
 
         //Go to membership URL
         await page.goto(cfg.pages.membership.url);
-        await page.screenshot({ path: `${imagePath}/1_membership_homepage.png`, fullPage: true });
+        // await page.screenshot({ path: `${imagePath}/1_membership_homepage.png`, fullPage: true });
 
         //Click Join, renew or gift this membership
         await page.click(cfg.pages.membership.selectors[0]);
@@ -40,8 +43,7 @@ test.describe('Membership', () => {
         await joinPage.selectOption(cfg.common['membership-form'].title, cfg.personal.title);
         await joinPage.fill(cfg.common['membership-form'].first, cfg.personal.first);
         await joinPage.fill(cfg.common['membership-form'].last, cfg.personal.last);
-        await joinPage.waitForTimeout(500);
-        await joinPage.screenshot({ path: `${imagePath}/2_membership_registration.png`, fullPage: true });
+        await joinPage.screenshot({ path: `${imagePath}/1_membership_checkout.png`, fullPage: true });
         await joinPage.click(cfg.pages.membership.continue);
 
         //Fill cart page fill out personal information
@@ -53,9 +55,8 @@ test.describe('Membership', () => {
         await joinPage.fill(cfg.common['cart-form'].zip, cfg.personal.zip);
         await joinPage.fill(cfg.common['cart-form'].city, cfg.personal.city);
         await joinPage.fill(cfg.common['cart-form'].address, cfg.personal.address);
-        await joinPage.waitForTimeout(500);
-        await joinPage.screenshot({ path: `${imagePath}/3_membership_cart.png`, fullPage: true });
+        await joinPage.screenshot({ path: `${imagePath}/2_membership_cart.png`, fullPage: true });
 
-        // await context.close();
+        await context.close();
     });
 });
