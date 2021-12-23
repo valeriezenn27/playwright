@@ -1,6 +1,9 @@
 {
   "scripts": {
-    "membership": "npx playwright test --headed"
+    "e2e:all": "npx playwright test --headed",
+    "e2e:membership": "npx playwright test tests/membership.spec.ts",
+    "e2e:donation": "npx playwright test tests/donation.spec.ts",
+    "e2e:signin": "npx playwright test tests/signin.spec.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.17.1",

@@ -16,7 +16,8 @@ test.describe('Membership', () => {
         const context = await browser.newContext({
             recordVideo: { dir: videoPath }
         });
-
+        
+        page.close();
         page = await context.newPage();
 
         //Go to membership URL
@@ -56,6 +57,6 @@ test.describe('Membership', () => {
         await joinPage.waitForTimeout(500);
         await joinPage.screenshot({ path: `${imagePath}/3_membership_cart.png`, fullPage: true });
 
-        // await context.close();
+        await context.close();
     });
 });
